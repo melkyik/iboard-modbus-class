@@ -29,18 +29,13 @@
 #include <Arduino.h>
 #include <avr/boot.h>
 #include "DALI.h"
-//#include "DaliReciveCMD.ino"
-//#include "DaliTransmitCMD.ino"
-//#include "Dali_Init.ino"
+
 
 
 //#define ROOM1       // Клубника комната #1 (вторая очередь, справа)
 //#define ROOM2     // Клубника комната #2 (первая очередь, слева)
-
-
-
 #define Capsum     // Клубника комната #2 (первая очередь, слева)
-//#define LOCALIP   // 192, 168, 1, 10
+
 // Ethernet settings (depending on MAC and Local network)
 
 #ifdef ROOM1
