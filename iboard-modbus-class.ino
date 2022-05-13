@@ -1,4 +1,4 @@
-//--************** DALI[0] шлюз для LED драйверов                    *************
+//--************** DALI шлюз для LED драйверов                    *************
 //--************** Старт разработки 23.09.2021г.                  *************
 //************** Версия для Iboard 1.2, релиз от 04.05.2022 (w5500+Atmega328P)     *************
 // -------------- Реализован сброс адреса через 10 сек подтягивания к земле контакта D2 на кнопке модуля DALI[0] 
@@ -68,17 +68,12 @@
 #define ADDR_IP            0 
 #define MB_ADDR_IP         155 //смещение EEPROM адреса в модбасе ip 4 адреса (10.10.2.90)  4 адреса шлюза (10.10.2.1 ) 1 байт маски(24) и 2 байта контрольной суммы 
 
-#ifdef ROOM2
-  #define InversTX    // Инверсия сигнала необходима для модуля DALI_2_CLICK Клубника комната #2 (первая очередь, слева)
-#endif
-//#define resetbutton
-
 
 
 
 #define DALI_RX_PIN_CH1   14  // канал DALI[0] 1 А0
 #define DALI_TX_PIN_CH1   15  // канал DALI[0] 1 А1
-#define DALI_RX_PIN_CH2   16   // канал DALI[0] 2 А2
+#define DALI_RX_PIN_CH2   16  // канал DALI[0] 2 А2
 #define DALI_TX_PIN_CH2   17  // канал DALI[0] 2 А3
 #define DALI_RX_PIN_CH3   18  // канал DALI[0] 3 А4
 #define DALI_TX_PIN_CH3   19  // канал DALI[0] 3 А5
@@ -88,8 +83,20 @@
 #endif
 
 //----------------------------- Уровни сигналов ---------------------------
+//#define InversTX
+
+#ifdef ROOM2
+  #define InversTX    // Инверсия сигнала необходима для модуля DALI_2_CLICK Клубника комната #2 (первая очередь, слева)
+#endif
+//#define resetbutton
+
+#ifndef InversTX  //если на плате не инвертированы сигналы
 bool TX_HIGH_LEVEL = 1; 
 bool TX_LOW_LEVEL = 0;
+#else
+bool TX_HIGH_LEVEL = 0; 
+bool TX_LOW_LEVEL = 1;
+#endif
 //----------------------------- Ethernet, DALI[0] & Modbus ---------------------------
 MgsModbus Mb;
 DALIprotocol DALI[3];
