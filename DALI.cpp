@@ -1,4 +1,5 @@
 #include "DALI.h"
+
 // **************************** прием ответа от слейва *******************  
 
 
@@ -83,7 +84,9 @@ byte  DALIprotocol::DaliInit(word FirstAddr)
 {
   
   int ShortAddr=FirstAddr;
-  Serial.println("Initialization process...");
+  Serial.println("Initialization process... constants:");
+
+  Serial.println(DALI_TWO_PACKET_DELAY, DEC);
   Serial.println("Reset command");
   DaliTransmitCMD(RESET, 0x00);
   delay(2*DALI_TWO_PACKET_DELAY);
@@ -151,7 +154,7 @@ byte  DALIprotocol::DaliInit(word FirstAddr)
 
       Response = SearchAndCompare(SearchAddr);
      // delay(DALI_TWO_PACKET_DELAY);
-     //    Mb.MbsRun();   ///******************************* костыль, чтобы модбас не отваливался
+         mb->MbsRun();   ///******************************* костыль, чтобы модбас не отваливался
       if (Response>0)
       {
         if ((SearchAddr == 0) || (!SearchAndCompare(SearchAddr - 1)))
@@ -180,7 +183,7 @@ byte  DALIprotocol::DaliInit(word FirstAddr)
     ShortAddr++;
 
    // break; //только для одного модуля
-   //Mb.MbsRun();   ///******************************* костыль, чтобы модбас не отваливался
+     mb->MbsRun();   ///******************************* костыль, чтобы модбас не отваливался
 
   }
 

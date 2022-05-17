@@ -76,7 +76,10 @@
 #ifdef resetbutton
 #define RESET_PIN         2   // кнопка ресет адреса
 #endif
-
+//#define Led_indicator
+#ifdef Led_indicator
+int PIN_LED=7;  // светодиод "передача"
+#endif
 //----------------------------- Уровни сигналов ---------------------------
 //#define InversTX
 
@@ -103,7 +106,7 @@ IPAddress subnet(255, 255, 255, 0);
 
 int heartbeat; // пульс датчика - кол-во секунд работы 0-32 767
 unsigned long last_Update_Time  = 1;     // Переменная для хранения времени последнего считывания с датчика
-int PIN_LED=14;  // светодиод "передача"
+
 ////////////////////////////////////////////////////////////
 
 
@@ -123,7 +126,9 @@ void setup()
    // pinMode(RESET_PIN, INPUT);
   // serial setup
   Serial.begin(9600);
+  #ifdef Led_indicator
      pinMode (PIN_LED, OUTPUT);           // светодиод "передача"
+   #endif
    // initialize the ethernet device
   Mb.MbData[200];     // Holding Register 40001
   Serial.println("Modbus - Dali Gateway on Dali2click shield");  
@@ -172,7 +177,8 @@ void setup()
   digitalWrite(DALI_TX_PIN_CH3, TX_HIGH_LEVEL);
   //обязательно задаем значения пинов для обьектов DALI
   DALI[0].DALI_RX_PIN=DALI_RX_PIN_CH1;
-  DALI[0].DALI_RX_PIN=DALI_TX_PIN_CH1;
+  DALI[0].DALI_TX_PIN=DALI_TX_PIN_CH1;
+  DALI[0].mb=&Mb; //это нужно чтобы не отваливался модбас - передадим указатель на него и будем вызвать в классе
 }
 //------------------------функция расчет контрольной суммы----------------------
 unsigned int CRC16_2(unsigned char *buf,  int len)
@@ -286,7 +292,9 @@ if (ms < last_command_Time) last_command_Time=0;       // сброс при пе
 //---------------- управление через регистр  1 - мощность LED на канале 1 в % (бродкаст) 1- выкл, 100 - макс
 // 1 в регистр 1 - выключить канал 1 
  if (Mb.MbData[1] == 1 && (ms - last_command_Time) > 1000){
+                    #ifdef Led_indicator
                      digitalWrite(PIN_LED, HIGH);   // выкл
+                    #endif
                      Serial.println("Broadcast LED channel#1 OFF"); 
                      DALI[0].DaliTransmitCMD(BROADCAST_CMD, OFF);
                      delay(DALI_TWO_PACKET_DELAY);
@@ -296,7 +304,9 @@ if (ms < last_command_Time) last_command_Time=0;       // сброс при пе
                       }
 // управление мощностью канала 1 
   if (Mb.MbData[1] >= 1 && Mb.MbData[1] <= 254 && (ms - last_command_Time) > 1000){ 
-                      digitalWrite(PIN_LED, HIGH);   // выкл
+                    #ifdef Led_indicator
+                     digitalWrite(PIN_LED, HIGH);   // выкл
+                    #endif
                       Channel_1_Power = Mb.MbData[1];    // читаем уставку мощности
                       Serial.print("Broadcast LED channel#1 Power "); Serial.println(Channel_1_Power);                
             //          delay(2*DALI_TWO_PACKET_DELAY);
@@ -308,7 +318,9 @@ if (ms < last_command_Time) last_command_Time=0;       // сброс при пе
                       }
 // Установка мощности по умолчанию (при включении) - для этого необходимо записать значение 300 в регистр 2
  if (Mb.MbData[1] == 300 && (ms - last_command_Time) > 1000){
+                   #ifdef Led_indicator
                      digitalWrite(PIN_LED, HIGH);   // выкл
+                    #endif
                      Serial.println("Broadcast LED channel#1 Set POWER ON LEVEL"); 
                      DALI[0].DaliTransmitCMD(BROADCAST_CMD, STORE_DTR0);
                      delay(DALI_TWO_PACKET_DELAY);
@@ -330,7 +342,9 @@ if (ms < last_command_Time) last_command_Time=0;       // сброс при пе
 //---------------- управление через регистр  2 - мощность LED на канале 2 в % (бродкаст) 1- выкл, 100 - макс
 // 1 в регистр 2 - выключить канал 2 
  if (Mb.MbData[2] == 1 && (ms - last_command_Time) > 1000){
+                      #ifdef Led_indicator
                      digitalWrite(PIN_LED, HIGH);   // выкл
+                    #endif
                      DALI[0].DaliTransmitCMD(BROADCAST_CMD, OFF);
                      Serial.println("Broadcast LED channel#2 OFF"); 
                      delay(DALI_TWO_PACKET_DELAY);
@@ -340,7 +354,9 @@ if (ms < last_command_Time) last_command_Time=0;       // сброс при пе
                       }
 // управление мощностью канала 2 
   if (Mb.MbData[2] >= 1 && Mb.MbData[2] <= 254 && (ms - last_command_Time) > 1000){       
-                      digitalWrite(PIN_LED, HIGH);   // выкл
+                    #ifdef Led_indicator
+                     digitalWrite(PIN_LED, HIGH);   // выкл
+                    #endif
                       Channel_2_Power = Mb.MbData[2];    // читаем уставку по температуре
                       Serial.print("Broadcast LED channel#2 Power "); 
                       Serial.print(Channel_2_Power);                
@@ -353,7 +369,9 @@ if (ms < last_command_Time) last_command_Time=0;       // сброс при пе
                       }
 // Установка мощности по умолчанию (при включении) - для этого необходимо записать значение 200 в регистр 2
  if (Mb.MbData[2] == 300 && (ms - last_command_Time) > 1000){
+                       #ifdef Led_indicator
                      digitalWrite(PIN_LED, HIGH);   // выкл
+                    #endif
                      DALI[0].DaliTransmitCMD(BROADCAST_CMD, STORE_DTR0);
                      Serial.println("Broadcast LED channel#2 Set POWER ON LEVEL"); 
                      delay(DALI_TWO_PACKET_DELAY);
@@ -369,7 +387,9 @@ if (ms < last_command_Time) last_command_Time=0;       // сброс при пе
 //---------------- управление через регистр  3 - мощность LED на канале 3 в % (бродкаст) 1- выкл, 100 - макс
 // 1 в регистр 3 - выключить канал 3 
  if (Mb.MbData[3] == 1 && (ms - last_command_Time) > 1000){
+                      #ifdef Led_indicator
                      digitalWrite(PIN_LED, HIGH);   // выкл
+                    #endif
                      DALI[0].DaliTransmitCMD(BROADCAST_CMD, OFF);
                      Serial.println("Broadcast LED channel#3 OFF"); 
                      delay(DALI_TWO_PACKET_DELAY);
@@ -379,7 +399,9 @@ if (ms < last_command_Time) last_command_Time=0;       // сброс при пе
                       }
 // управление мощностью канала 3 
   if (Mb.MbData[3] >= 1 && Mb.MbData[3] <= 254 && (ms - last_command_Time) > 1000){       
-                      digitalWrite(PIN_LED, HIGH);   // выкл
+                       #ifdef Led_indicator
+                     digitalWrite(PIN_LED, HIGH);   // выкл
+                    #endif
                       Channel_3_Power = Mb.MbData[3];    // читаем уставку по температуре
                       Serial.print("Broadcast LED channel#3 Power "); 
                       Serial.print(Channel_3_Power);                
@@ -392,7 +414,9 @@ if (ms < last_command_Time) last_command_Time=0;       // сброс при пе
                       }
 // Установка мощности по умолчанию (при включении) - для этого необходимо записать значение 300 в регистр 2
  if (Mb.MbData[3] == 300 && (ms - last_command_Time) > 1000){
+                       #ifdef Led_indicator
                      digitalWrite(PIN_LED, HIGH);   // выкл
+                    #endif
                      DALI[0].DaliTransmitCMD(BROADCAST_CMD, STORE_DTR0);
                      Serial.println("Broadcast LED channel#3 Set POWER ON LEVEL"); 
                      delay(DALI_TWO_PACKET_DELAY);
@@ -451,9 +475,9 @@ for (int i=0; i<64; i++){
   }
 }
 //************************** 
-
- if ((ms - last_command_Time) > 2000) digitalWrite(PIN_LED, LOW);  // выкл
-                      
+  #ifdef Led_indicator               
+    if ((ms - last_command_Time) > 2000) digitalWrite(PIN_LED, LOW);  // выкл
+  #endif               
 
 // ******** циклический опрос состояний драйверов раз в 50 мс по одному 
  if (millis() - FeedBack_Timer > 50){

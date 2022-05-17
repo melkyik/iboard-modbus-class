@@ -1,5 +1,5 @@
 #include "Arduino.h"
-
+#include "MgsModbus.h"
 
 
 
@@ -52,10 +52,11 @@
 class DALIprotocol
 {
 public:
-bool INV_READ =           1; //инверсия уровня для чтения
+bool INV_READ =           0; //инверсия уровня для чтения
 bool INV_WRITE =          0; //инверсия уровня для записи
 uint8_t DALI_RX_PIN;
 uint8_t DALI_TX_PIN;
+MgsModbus *mb;
   // general
   byte DaliReciveCMD();
   byte DaliTransmitCMD(uint8_t Part1, uint8_t Part2);
