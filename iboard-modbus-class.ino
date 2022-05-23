@@ -73,6 +73,7 @@
 #define DALI_RX_PIN_CH3   18  // канал DALI[0] 3 А4
 #define DALI_TX_PIN_CH3   19  // канал DALI[0] 3 А5
 
+#define resetbutton
 #ifdef resetbutton
 #define RESET_PIN         2   // кнопка ресет адреса
 #endif
@@ -86,7 +87,7 @@ int PIN_LED=7;  // светодиод "передача"
 #ifdef ROOM2
   #define InversTX    // Инверсия сигнала необходима для модуля DALI_2_CLICK Клубника комната #2 (первая очередь, слева)
 #endif
-//#define resetbutton
+
 
 #ifndef InversTX  //если на плате не инвертированы сигналы
 bool TX_HIGH_LEVEL = 1; 
@@ -148,7 +149,7 @@ void setup()
                           
                           mac[5]=Mb.MbData[MB_ADDR_IP+8];
                           
-                          getmaskbyte(subnet,Mb.MbData[MB_ADDR_IP+9]);
+                          getmaskbyte(subnet,(byte*)Mb.MbData[MB_ADDR_IP+9]);
                           }   else  readipfromram();
 #endif 
   Ethernet.begin(mac, ip, gateway, subnet);   // start ethernet interface
@@ -480,7 +481,7 @@ for (int i=0; i<64; i++){
   #endif               
 
 // ******** циклический опрос состояний драйверов раз в 50 мс по одному 
- if (millis() - FeedBack_Timer > 50){
+ if (millis() - FeedBack_Timer > 100){
       int adr = current_adr << 1;                                     // сдвигаем адрес на 1 бит (формат адреса в DALI[0] для отправки команды)
       DALI[0].DaliTransmitCMD(adr+1, 160);  // чтение текущей мощности с драйвера   
       LED_Ch1_Power [current_adr] = DALI[0].DaliReciveCMD();   // 

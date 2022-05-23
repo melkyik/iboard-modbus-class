@@ -180,7 +180,7 @@ byte  DALIprotocol::DaliInit(word FirstAddr)
     Serial.println(ShortAddr);
 
     //Mb.MbData[19] ++;
-    ShortAddr++;
+    ShortAddr+=(FirstAddr=1);
 
    // break; //только для одного модуля
      mb->MbsRun();   ///******************************* костыль, чтобы модбас не отваливался
