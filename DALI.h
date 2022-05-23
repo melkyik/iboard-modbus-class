@@ -56,16 +56,18 @@ bool INV_READ =           0; //инверсия уровня для чтения
 bool INV_WRITE =          0; //инверсия уровня для записи
 uint8_t DALI_RX_PIN;
 uint8_t DALI_TX_PIN;
-MgsModbus *mb;
+MgsModbus *mb;  //указатель для перезапуска модбас во время поиска
+int LedsFound = 0;                        //найденые светильники
   // general
   byte DaliReciveCMD();
   byte DaliTransmitCMD(uint8_t Part1, uint8_t Part2);
-  byte DaliInit(word FirstAddr);
+  byte DaliInit(word FirstAddr,word inc);
 private:
     bool SearchAndCompare(long SearchAddr);
     bool TX_HIGH_LEVEL = 1; 
     bool TX_LOW_LEVEL = 0;
     int Step_Counter;                         // счетчик шагов при инициализации драйверов
+ 
 
 };
 

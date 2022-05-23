@@ -73,6 +73,8 @@
 #define DALI_RX_PIN_CH3   18  // канал DALI[0] 3 А4
 #define DALI_TX_PIN_CH3   19  // канал DALI[0] 3 А5
 
+#define SCAN_TIMEOUT      50  //милисекунд между командами опроса девайсов в шине      
+
 #define resetbutton
 #ifdef resetbutton
 #define RESET_PIN         2   // кнопка ресет адреса
@@ -132,6 +134,7 @@ void setup()
    #endif
    // initialize the ethernet device
   Mb.MbData[200];     // Holding Register 40001
+  for (int i=0 ;i<200;i++){Mb.MbData[i]=0;}
   Serial.println("Modbus - Dali Gateway on Dali2click shield");  
   //читаем с флеша то что там есть, или при ошибке будут использованы инициализированные данные с заголовка
 #ifdef resetbutton
@@ -454,9 +457,10 @@ writeiptoflash();
 }
   
 //**************************Инициализация LED драйверов (назначение коротких адресов******************************************************************************************
- if (Mb.MbData[17] == 1 && (ms - last_command_Time) > 1000){
+ if ((Mb.MbData[17] >0 ) &&(Mb.MbData[17] <3 ) && ((ms - last_command_Time) > 1000)){
   Mb.MbData[19] = 0;
-  DALI[0].DaliInit(Mb.MbData[18]);         // запускаем процесс поиска LED-драйверов
+  DALI[0].DaliInit(Mb.MbData[18],(Mb.MbData[17]==1));         // запускаем процесс поиска LED-драйверов
+  Mb.MbData[19]=DALI[0].LedsFound;
   Mb.MbData[17] = 0;                  // сбросить регистр 17
   Mb.MbsRun();                        //после долгого поиска может слететь модбас запустим заново
   last_command_Time = ms;
@@ -481,7 +485,7 @@ for (int i=0; i<64; i++){
   #endif               
 
 // ******** циклический опрос состояний драйверов раз в 50 мс по одному 
- if (millis() - FeedBack_Timer > 100){
+ if (millis() - FeedBack_Timer > SCAN_TIMEOUT){
       int adr = current_adr << 1;                                     // сдвигаем адрес на 1 бит (формат адреса в DALI[0] для отправки команды)
       DALI[0].DaliTransmitCMD(adr+1, 160);  // чтение текущей мощности с драйвера   
       LED_Ch1_Power [current_adr] = DALI[0].DaliReciveCMD();   // 

@@ -80,13 +80,13 @@ byte  DALIprotocol::DaliTransmitCMD(uint8_t Part1, uint8_t Part2)
 }
 
 // инициализация DALI
-byte  DALIprotocol::DaliInit(word FirstAddr)
+byte  DALIprotocol::DaliInit(word FirstAddr,word inc)
 {
-  
+  Step_Counter=1;
+  LedsFound=0;
   int ShortAddr=FirstAddr;
-  Serial.println("Initialization process... constants:");
-
-  Serial.println(DALI_TWO_PACKET_DELAY, DEC);
+  Serial.println("Initialization process...");
+ if (!inc) {Serial.println("NO INC!");}
   Serial.println("Reset command");
   DaliTransmitCMD(RESET, 0x00);
   delay(2*DALI_TWO_PACKET_DELAY);
@@ -110,7 +110,7 @@ byte  DALIprotocol::DaliInit(word FirstAddr)
   delay(DALI_TWO_PACKET_DELAY);
   delay(100);
 
-  int Step_Counter = 0;   // счетчик шагов при инициализации драйверов
+
    int StartShortAddr = ShortAddr;
 
   while(ShortAddr < 64)
@@ -179,8 +179,8 @@ byte  DALIprotocol::DaliInit(word FirstAddr)
     Serial.print("Assigning short address ");
     Serial.println(ShortAddr);
 
-    //Mb.MbData[19] ++;
-    ShortAddr+=(FirstAddr=1);
+    LedsFound ++;
+    ShortAddr+=inc ;
 
    // break; //только для одного модуля
      mb->MbsRun();   ///******************************* костыль, чтобы модбас не отваливался
