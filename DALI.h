@@ -54,6 +54,7 @@ class DALIprotocol
 public:
 bool INV_READ =           0; //инверсия уровня для чтения
 bool INV_WRITE =          0; //инверсия уровня для записи
+byte DaliNum =            0; //номер дали
 uint8_t DALI_RX_PIN;
 uint8_t DALI_TX_PIN;
 MgsModbus *mb;  //указатель для перезапуска модбас во время поиска
@@ -62,6 +63,9 @@ int LedsFound = 0;                        //найденые светильни�
   byte DaliReciveCMD();
   byte DaliTransmitCMD(uint8_t Part1, uint8_t Part2);
   byte DaliInit(word FirstAddr,word inc);
+  byte DaliOFF(); //послать OFF
+  byte DaliBroadcast(byte power); //послать бродкаст
+  byte DaliDefault(); //установить дефолт при включении
 private:
     bool SearchAndCompare(long SearchAddr);
     bool TX_HIGH_LEVEL = 1; 

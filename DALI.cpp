@@ -220,3 +220,30 @@ bool DALIprotocol::SearchAndCompare(long SearchAddr)
     return Response;
     }
 //-------------------------------------------------
+byte  DALIprotocol::DaliOFF() //послать OFF
+ {
+  Serial.print("Broadcast ch#"); Serial.print(DaliNum); Serial.println("OFF"); 
+  DaliTransmitCMD(BROADCAST_CMD, OFF);
+  delay(DALI_TWO_PACKET_DELAY);
+ }
+ byte  DALIprotocol::DaliBroadcast(byte power) //послать бродкаст
+ {  
+   Serial.print("Broadcast ch#"); Serial.print(DaliNum); Serial.print(" power="); Serial.println(power);
+   DaliTransmitCMD(BROADCAST_PWR, power);
+    //delay(DALI_TWO_PACKET_DELAY);
+ }
+byte  DALIprotocol::DaliDefault()//установить дефолт при включении
+{     Serial.print("Broadcast ch#"); Serial.print(DaliNum); Serial.println(" Set Default"); 
+      DaliTransmitCMD(BROADCAST_CMD, STORE_DTR0);
+      delay(DALI_TWO_PACKET_DELAY);
+      DaliTransmitCMD(BROADCAST_CMD, STORE_DTR0);
+      delay(DALI_TWO_PACKET_DELAY);
+      DaliTransmitCMD(BROADCAST_CMD,POWER_ON_LEVEL);
+      delay(DALI_TWO_PACKET_DELAY);
+      DaliTransmitCMD(BROADCAST_CMD,POWER_ON_LEVEL);
+      delay(DALI_TWO_PACKET_DELAY);
+      DaliTransmitCMD(BROADCAST_CMD,POWER_FAILURE_LEVEL);
+      delay(DALI_TWO_PACKET_DELAY);
+      DaliTransmitCMD(BROADCAST_CMD,POWER_FAILURE_LEVEL);
+      delay(DALI_TWO_PACKET_DELAY);
+}
