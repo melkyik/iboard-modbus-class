@@ -67,12 +67,12 @@
 
 
 
-#define DALI_RX_PIN_CH1   14  // канал DALI[0] 1 А0
-#define DALI_TX_PIN_CH1   15  // канал DALI[0] 1 А1
-#define DALI_RX_PIN_CH2   16  // канал DALI[0] 2 А2
-#define DALI_TX_PIN_CH2   17  // канал DALI[0] 2 А3
-#define DALI_RX_PIN_CH3   18  // канал DALI[0] 3 А4
-#define DALI_TX_PIN_CH3   19  // канал DALI[0] 3 А5
+#define DALI_RX_PIN_CH1   14  // канал DALI 1 А0
+#define DALI_TX_PIN_CH1   15  // канал DALI 1 А1
+#define DALI_RX_PIN_CH2   16  // канал DALI 2 А2
+#define DALI_TX_PIN_CH2   17  // канал DALI 2 А3
+#define DALI_RX_PIN_CH3   18  // канал DALI 3 А4
+#define DALI_TX_PIN_CH3   19  // канал DALI 3 А5
 #define chanel2DALI //активировать дали 2 канал
 #define chanel3DALI //активировать дали 3 канал
 
