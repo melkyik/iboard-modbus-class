@@ -39,17 +39,6 @@
 
 // Ethernet settings (depending on MAC and Local network)
 
-#ifdef ROOM1
-  byte mac[] = {0x90, 0xA2, 0xDA, 0x0E, 0x94, 0xB7 };  // Клубника комната #1 (вторая очередь, справа)
-  IPAddress ip(10, 10, 2, 68);  // Клубника комната #1 (вторая очередь, справа)
-  IPAddress gateway(10, 10, 2, 1);
-#endif  
-#ifdef ROOM2
-  byte mac[] = {0x90, 0xA2, 0xDA, 0x0E, 0x94, 0xB6 };  // Клубника комната #2 (первая очередь, слева)
-  IPAddress ip(10, 10, 2, 67);  // Клубника комната #2 (первая очередь, слева)
-
-  IPAddress gateway(10, 10, 2, 1);
-#endif
 #ifdef Capsum
   byte mac[] = {0x90, 0xA2, 0xDA, 0x0E, 0x94, 0xA1 };  // Клубника комната #2 (первая очередь, слева)
   IPAddress ip(10, 10, 2, 90);  // Проект Capsum, временный адрес
