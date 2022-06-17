@@ -55,16 +55,16 @@ public:
 bool INV_READ =           0; //инверсия уровня для чтения
 bool INV_WRITE =          0; //инверсия уровня для записи
 byte DaliNum =            0; //номер дали
-uint8_t DALI_RX_PIN;
-uint8_t DALI_TX_PIN;
+uint8_t DALI_RX_PIN;          //RX пин для устройства DALI
+uint8_t DALI_TX_PIN;          //TX пин для устройства DALI
 MgsModbus *mb;  //указатель для перезапуска модбас во время поиска
 int LedsFound = 0;                        //найденые светильники
   // general
-  byte DaliReciveCMD();
-  byte DaliTransmitCMD(uint8_t Part1, uint8_t Part2);
-  byte DaliInit(word FirstAddr,word inc);
+  byte DaliReciveCMD();//получить ответ канала
+  byte DaliTransmitCMD(uint8_t Part1, uint8_t Part2);//передать ответ канала
+  byte DaliInit(word FirstAddr,word inc); //инициализация
   byte DaliOFF(); //послать OFF
-  byte DaliBroadcast(byte power); //послать бродкаст
+  byte DaliBroadcast(byte power); //послать бродкаст мощность
   byte DaliDefault(); //установить дефолт при включении
 private:
     bool SearchAndCompare(long SearchAddr);
