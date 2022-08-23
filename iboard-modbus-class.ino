@@ -417,8 +417,9 @@ if (ms < last_command_Time) last_command_Time=0;       // сброс при пе
     int i=1;
     do {
       Serial.print  ("Address "); Serial.print  (Mb.MbData[12]); Serial.print  ("; Command "); Serial.print  (Mb.MbData[13]); Serial.print  ("; Repeat "); Serial.println  (i); 
-      Mb.MbData[15] = DALI[0].DaliTransmitCMD(Mb.MbData[12], Mb.MbData[13]);
+      DALI[0].DaliTransmitCMD(Mb.MbData[12], Mb.MbData[13]);
       delay(DALI_TWO_PACKET_DELAY);
+      Mb.MbData[15]=DALI[0].DaliReciveCMD(); //получим ответ);
       i++;
     } while (Mb.MbData[14] >= i);
    Mb.MbData[11] = 0;          // сбросить регистр 11
